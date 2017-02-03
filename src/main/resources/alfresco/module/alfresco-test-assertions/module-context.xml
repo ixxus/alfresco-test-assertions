@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- The beans below are to help setting Alfresco public services so we don't need to pass them when writing a test -->
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="com.ixxus.alfresco.NodeAssert.setNodeService"/>
+        <property name="arguments">
+            <list>
+                <ref bean="NodeService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="com.ixxus.alfresco.NodeAssert.setContentService"/>
+        <property name="arguments">
+            <list>
+                <ref bean="ContentService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="com.ixxus.alfresco.SiteAssert.setSiteService"/>
+        <property name="arguments">
+            <list>
+                <ref bean="SiteService"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>
