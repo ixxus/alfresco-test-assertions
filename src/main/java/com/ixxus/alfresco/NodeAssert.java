@@ -3,14 +3,19 @@
  */
 package com.ixxus.alfresco;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ContentData;
+import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * Custom assertion specifically for various operations around an Alfresco node
@@ -102,7 +107,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
     }
 
     private boolean hasAspectforNode(final QName aspect) {
-        isNotNull();
+        exists();
         return nodeService.hasAspect(this.actual, aspect);
     }
 
@@ -128,7 +133,6 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * @param expectedValue
      */
     public NodeAssert hasPropertyValue(final QName property, final Serializable expectedValue) {
-        isNotNull();
         exists();
         final Serializable actualValue = nodeService.getProperty(this.actual, property);
         Assertions.assertThat(expectedValue).isEqualTo(actualValue);
@@ -143,7 +147,6 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * @param expectedValue
      */
     public NodeAssert doesNotHavePropertyValue(final QName property, final Serializable expectedValue) {
-        isNotNull();
         exists();
         final Serializable actualValue = nodeService.getProperty(this.actual, property);
         Assertions.assertThat(expectedValue).isNotEqualTo(actualValue);
@@ -154,11 +157,10 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check if a node has a multiple value property with the provided value as
      * a member.
      *
-     * @param property      The multi-value property
+     * @param property The multi-value property
      * @param expectedValue The value to test the existence of
      */
     public <T> NodeAssert hasMultiplePropertyMember(final QName property, final T expectedValue) {
-        isNotNull();
         exists();
         final List<T> values = (List<T>) nodeService.getProperty(this.actual, property);
         if (!values.contains(expectedValue)) {
@@ -177,7 +179,6 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * @param expectedValue
      */
     public <T> NodeAssert doesNotHaveMultiplePropertyMember(final QName property, final T expectedValue) {
-        isNotNull();
         exists();
         final List<T> values = (List<T>) nodeService.getProperty(this.actual, property);
         if ((values != null) && values.contains(expectedValue)) {
@@ -193,10 +194,9 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * matches.
      *
      * @param qnamePattern the association qname pattern to match against
-     * @param target       The {@link NodeRef} of the target
+     * @param target The {@link NodeRef} of the target
      */
     public NodeAssert doesNotHaveTargetAssociationTo(final QName qnamePattern, final NodeRef target) {
-        isNotNull();
         exists();
         for (final AssociationRef assocRef : nodeService.getTargetAssocs(this.actual, qnamePattern)) {
             if (assocRef.getTargetRef().equals(target)) {
@@ -213,7 +213,6 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * @param qnamePattern the association qname pattern to match against
      */
     public NodeAssert doesNotHaveTargetAssociation(final QName qnamePattern) {
-        isNotNull();
         exists();
         final List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(this.actual, qnamePattern);
         if (!targetAssocs.isEmpty()) {
@@ -240,7 +239,6 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * @return
      */
     public NodeAssert hasContent(final QName contentQName) {
-        isNotNull();
         exists();
         final Serializable prop = nodeService.getProperty(actual, contentQName);
         if (prop != null) {
@@ -268,11 +266,10 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check that a property has specific content
      *
      * @param contentQName Which property to check
-     * @param expected     String-representation of the expected content
+     * @param expected String-representation of the expected content
      * @return
      */
     public NodeAssert hasContent(final QName contentQName, final String expected) {
-        isNotNull();
         exists();
         final ContentReader reader = contentService.getReader(actual, contentQName);
         if (reader != null) {
