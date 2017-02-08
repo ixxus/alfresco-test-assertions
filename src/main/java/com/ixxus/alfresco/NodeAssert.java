@@ -3,23 +3,20 @@
  */
 package com.ixxus.alfresco;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ContentData;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.QName;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Custom assertion specifically for various operations around an Alfresco node
  *
+ * @author Bert Bloomer
+ * @author Simon Hutchinson
  * @author Alex Lu
  */
 public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {

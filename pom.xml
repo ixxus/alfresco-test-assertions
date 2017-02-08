@@ -16,6 +16,33 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <name>Bert Bloomer</name>
+            <email>bert.bloomer@ixxus.com</email>
+            <organization>Ixxus</organization>
+            <organizationUrl>http://www.ixxus.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Simon Hutchinson</name>
+            <email>simon.hutchinson@ixxus.com</email>
+            <organization>Ixxus</organization>
+            <organizationUrl>http://www.ixxus.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Alex Lu</name>
+            <email>alex.lu@ixxus.com</email>
+            <organization>Ixxus</organization>
+            <organizationUrl>http://www.ixxus.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>git@github.com:ixxus/alfresco-test-assertions.git</connection>
+        <developerConnection>git@github.com:ixxus/alfresco-test-assertions.git</developerConnection>
+        <url>https://github.com/ixxus/alfresco-test-assertions</url>
+    </scm>
+
     <properties>
         <alfresco.version>5.1</alfresco.version>
         <alfresco.groupId>org.alfresco</alfresco.groupId>
