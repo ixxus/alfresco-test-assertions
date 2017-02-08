@@ -31,17 +31,26 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
         super(nodeRef, NodeAssert.class);
     }
 
-    public static void setNodeService(final NodeService service) {
-        NodeAssert.nodeService = service;
+    /**
+     * Setter for Alfresco NodeService
+     *
+     * @param nodeService an instance of NodeService
+     */
+    public static void setNodeService(final NodeService nodeService) {
+        NodeAssert.nodeService = nodeService;
     }
 
-    public static void setContentService(final ContentService service) {
-        NodeAssert.contentService = service;
+    /**
+     * Setter for Alfresco ContentService
+     * @param contentService an instance of ContentService
+     */
+    public static void setContentService(final ContentService contentService) {
+        NodeAssert.contentService = contentService;
     }
 
     /**
      * @param nodeRef instance of a nodeRef
-     * @return
+     * @return The created node assertion object
      */
     public static NodeAssert assertThat(final NodeRef nodeRef) {
         return new NodeAssert(nodeRef);
@@ -50,7 +59,8 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
     /**
      * Check if a node's type matches a given expected type
      *
-     * @param expectedType
+     * @param expectedType expected node type
+     * @return The created node assertion object
      */
     public NodeAssert isType(final QName expectedType) {
         final QName actualType = nodeService.getType(this.actual);
@@ -62,6 +72,8 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
 
     /**
      * Check if a node exists. Fail if node does not exist.
+     *
+     * @return The created node assertion object
      */
     public NodeAssert exists() {
         final boolean exist = existsForNode();
@@ -78,6 +90,8 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
 
     /**
      * Check if a node does not exist. Fail if node does not exist;
+     *
+     * @return The created node assertion object
      */
     public NodeAssert doesNotExist() {
         final boolean exist = existsForNode();
@@ -91,7 +105,8 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check if a node has a given aspect. Fail if node does not have the given
      * aspect
      *
-     * @param aspect
+     * @param aspect expected aspect for a node
+     * @return The created node assertion object
      */
     public NodeAssert hasAspect(final QName aspect) {
         final boolean hasAspect = hasAspectforNode(aspect);
@@ -110,7 +125,8 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check if a node does not have a given aspect. Fail if node has the given
      * aspect
      *
-     * @param aspect
+     * @param aspect expected aspect
+     * @return The created node assertion object
      */
     public NodeAssert doesNotHaveAspect(final QName aspect) {
         final boolean hasAspect = hasAspectforNode(aspect);
@@ -124,8 +140,9 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check if a node has a property that matches an expected value. Fail if
      * node does not exist and does not have matched value
      *
-     * @param property
-     * @param expectedValue
+     * @param property name of a property
+     * @param expectedValue value of a property
+     * @return The created node assertion object
      */
     public NodeAssert hasPropertyValue(final QName property, final Serializable expectedValue) {
         isNotNull();
@@ -139,8 +156,9 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check if a node has a property that does not match an expected value.
      * Fail if matches.
      *
-     * @param property
-     * @param expectedValue
+     * @param property name of a property
+     * @param expectedValue value of a property
+     * @return The created node assertion object
      */
     public NodeAssert doesNotHavePropertyValue(final QName property, final Serializable expectedValue) {
         isNotNull();
@@ -156,6 +174,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      *
      * @param property      The multi-value property
      * @param expectedValue The value to test the existence of
+     * @return The created node assertion object
      */
     public <T> NodeAssert hasMultiplePropertyMember(final QName property, final T expectedValue) {
         isNotNull();
@@ -173,8 +192,9 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check if a node has a multiple value property with the provided value as
      * a member. Fail if matches.
      *
-     * @param property
-     * @param expectedValue
+     * @param property name of a property
+     * @param expectedValue value of a property
+     * @return The created node assertion object
      */
     public <T> NodeAssert doesNotHaveMultiplePropertyMember(final QName property, final T expectedValue) {
         isNotNull();
@@ -194,6 +214,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      *
      * @param qnamePattern the association qname pattern to match against
      * @param target       The {@link NodeRef} of the target
+     * @return The created node assertion object
      */
     public NodeAssert doesNotHaveTargetAssociationTo(final QName qnamePattern, final NodeRef target) {
         isNotNull();
@@ -207,10 +228,10 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
     }
 
     /**
-     * Check if a node has any target association with the given qname. Fail if
-     * > 0.
+     * Check if a node has any target association with the given qname. Fail if &gt; 0.
      *
      * @param qnamePattern the association qname pattern to match against
+     * @return The created node assertion object
      */
     public NodeAssert doesNotHaveTargetAssociation(final QName qnamePattern) {
         isNotNull();
@@ -224,9 +245,9 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
 
     /**
      * Check that {@link ContentModel#PROP_CONTENT} contains (non-empty)
-     * content, i.e. content with size>0
+     * content, i.e. content with size &gt; 0
      *
-     * @return
+     * @return The created node assertion object
      */
     public NodeAssert hasContent() {
         return hasContent(ContentModel.PROP_CONTENT);
@@ -234,10 +255,10 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
 
     /**
      * Check that a property contains (non-empty) content, i.e. content with
-     * size>0
+     * size &gt; 0
      *
      * @param contentQName Which property to check
-     * @return
+     * @return The created node assertion object
      */
     public NodeAssert hasContent(final QName contentQName) {
         isNotNull();
@@ -258,7 +279,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check that {@link ContentModel#PROP_CONTENT} has specific content
      *
      * @param expected String-representation of the expected content
-     * @return
+     * @return The created node assertion object
      */
     public NodeAssert hasContent(final String expected) {
         return hasContent(ContentModel.PROP_CONTENT, expected);
@@ -269,7 +290,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      *
      * @param contentQName Which property to check
      * @param expected     String-representation of the expected content
-     * @return
+     * @return The created node assertion object
      */
     public NodeAssert hasContent(final QName contentQName, final String expected) {
         isNotNull();

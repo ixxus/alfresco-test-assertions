@@ -23,6 +23,7 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
      * Only constructor - use the assertSiteThat-method
      *
      * @param siteInfo an instance of a siteInfo
+     * @return The created site assertion object
      */
     private SiteAssert(final SiteInfo siteInfo) {
         super(siteInfo, SiteAssert.class);
@@ -37,7 +38,7 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
      * Instantiate a custom site assertion with an instance of SiteInfo.
      *
      * @param siteInfo instance of a SiteInfo
-     * @return an instance of site assertion
+     * @return The created site assertion object
      */
     public static SiteAssert assertThat(final SiteInfo siteInfo) {
         Objects.requireNonNull(siteInfo, "siteInfo is required");
@@ -47,8 +48,8 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
     /**
      * Instantiate a custom site assertion with name of site.
      *
-     * @param siteShortname
-     * @return an instance of site assertion
+     * @param siteShortname shortname of a site
+     * @return The created site assertion object
      */
     public static SiteAssert assertThat(final String siteShortname) {
         Objects.requireNonNull(siteShortname, "siteShortname is required.");
@@ -59,7 +60,8 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
     /**
      * Check if the site preset of the actual site matches expected value.
      *
-     * @param expectedSitePreset
+     * @param expectedSitePreset expected site preset
+     * @return The created site assertion object
      */
     public SiteAssert isSitePreset(final String expectedSitePreset) {
         final String actualSitePreset = actual.getSitePreset();
@@ -70,7 +72,8 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
     /**
      * Check if an expected node resides within the actual site.
      *
-     * @param expectedNode
+     * @param expectedNode expected node in a site
+     * @return The created site assertion object
      */
     public SiteAssert isNodeInSite(final NodeRef expectedNode) {
         final SiteInfo expectedSite = siteService.getSite(expectedNode);
@@ -85,7 +88,8 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
     /**
      * Check if an expected node resides within the actual site.
      *
-     * @param expectedNode
+     * @param expectedNode expected node NOT in a site
+     * @return The created site assertion object
      */
     public SiteAssert isNodeNotInSite(final NodeRef expectedNode) {
         final SiteInfo expectedSite = siteService.getSite(expectedNode);
@@ -99,7 +103,8 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
     /**
      * Check if the name of the actual site matches expected name.
      *
-     * @param expectedSiteName
+     * @param expectedSiteName expected site name
+     * @return The created site assertion object
      */
     public SiteAssert isSiteName(final String expectedSiteName) {
         Assertions.assertThat(expectedSiteName).isEqualTo(actual.getShortName());
@@ -108,8 +113,9 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
 
     /**
      * Check if a site exists for an expected site name.
+     * @return The created site assertion object
      *
-     * @param expectedSiteName
+     * @param expectedSiteName expected site name
      */
     public SiteAssert hasSite(final String expectedSiteName) {
         Assertions.assertThat(siteService.hasSite(expectedSiteName)).isTrue();
@@ -119,7 +125,8 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
     /**
      * Check if the actual site has an expected member.
      *
-     * @param expectedAuthority
+     * @param expectedAuthority expected member in a site
+     * @return The created site assertion object
      */
     public SiteAssert isMember(final String expectedAuthority) {
         Assertions.assertThat(siteService.isMember(actual.getShortName(), expectedAuthority)).isTrue();
@@ -129,7 +136,8 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
     /**
      * Check if a site has an expected container.
      *
-     * @param expectedContainer
+     * @param expectedContainer expected container in a site
+     * @return The created site assertion object
      */
     public SiteAssert hasContainer(final String expectedContainer) {
         Assertions.assertThat(containerExists(expectedContainer)).isTrue();
@@ -143,7 +151,8 @@ public class SiteAssert extends AbstractAssert<SiteAssert, SiteInfo> {
     /**
      * Check if a site does NOT have an expected container
      *
-     * @param expectedContainer
+     * @param expectedContainer expected container NOT in a site
+     * @return The created site assertion object
      */
     public SiteAssert doesNotHaveContainer(final String expectedContainer) {
         Assertions.assertThat(containerExists(expectedContainer)).isFalse();
