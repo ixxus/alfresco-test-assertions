@@ -22,3 +22,9 @@ assertThat(nodeRef).exists().hasAspect(ContentModel.ASPECT_EMAILED).hasPropertyV
 For more examples, check out [com.ixxus.alfresco.NodeAssertTest](src/test/java/com/ixxus/alfresco/NodeAssertTest.java).
 
 There's also a custom assertion for testing Alfresco sites. See [com.ixxus.alfresco.SiteAssert](src/main/java/com/ixxus/alfresco/SiteAssert.java) and [how to use it](src/test/java/com/ixxus/alfresco/SiteAssertTest.java)
+
+# Change log
+## [1] - 2017-02-09
+### Added
+- Node assertion
+- Site assertion
