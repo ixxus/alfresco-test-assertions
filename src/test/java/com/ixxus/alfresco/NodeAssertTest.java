@@ -222,4 +222,18 @@ public class NodeAssertTest extends AbstractServiceTest {
         w.putContent("content");
         assertThat(nodeRef).hasContent("different content");
     }
+
+    @Test
+    public void ensure_node_content_contains_our_string() {
+        ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+        w.putContent("my custom content");
+        assertThat(nodeRef).containsContent("custom");
+    }
+
+    @Test(expected = AssertionError.class)
+    public void ensure_node_content_that_does_not_contain_our_string_throws_exception() {
+        ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+        w.putContent("content");
+        assertThat(nodeRef).containsContent("different content");
+    }
 }

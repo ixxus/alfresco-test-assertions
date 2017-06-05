@@ -4,7 +4,12 @@
 package com.ixxus.alfresco;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ContentData;
+import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
@@ -257,6 +262,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * @return The created node assertion object
      */
     public NodeAssert hasContent(final QName contentQName) {
+        isNotNull();
         exists();
         final Serializable prop = nodeService.getProperty(actual, contentQName);
         if (prop != null) {
@@ -284,16 +290,47 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * Check that a property has specific content
      *
      * @param contentQName Which property to check
-     * @param expected     String-representation of the expected content
+     * @param expected String-representation of the expected content
      * @return The created node assertion object
      */
     public NodeAssert hasContent(final QName contentQName, final String expected) {
+        isNotNull();
         exists();
         final ContentReader reader = contentService.getReader(actual, contentQName);
         if (reader != null) {
             Assertions.assertThat(reader.getContentString()).as("Content should be equal").isEqualTo(expected);
         } else {
             failWithMessage("Node <%s> should have content ", actual);
+        }
+        return this;
+    }
+
+    /**
+     * Check that {@link ContentModel#PROP_CONTENT} contains specific content
+     *
+     * @param expected String-representation of the expected content
+     * @return The created node assertion object
+     */
+    public NodeAssert containsContent(final String expected) {
+        return containsContent(ContentModel.PROP_CONTENT, expected);
+    }
+
+    /**
+     * Check that a property contains specific content
+     *
+     * @param contentQName Which property to check
+     * @param expected String-representation of the expected content
+     * @return The created node assertion object
+     */
+    public NodeAssert containsContent(final QName contentQName, final String expected) {
+        isNotNull();
+        exists();
+        final ContentReader reader = contentService.getReader(actual, contentQName);
+        if (reader != null) {
+            Assertions.assertThat(reader.getContentString()).as("Content should contain our expected string")
+                    .contains(expected);
+        } else {
+            failWithMessage("Node <%s> should have our content ", actual);
         }
         return this;
     }
