@@ -4,15 +4,6 @@
 
 Fluent assertions for writing integration (remote unit) tests for Alfresco.
 
-# Include in your project
-```
-<dependency>
-    <groupId>com.ixxus.alfresco</groupId>
-    <artifactId>alfresco-test-assertions</artifactId>
-    <version>1</version>
-</dependency>
-```
-
 # Syntax
 Using the [com.ixxus.alfresco.NodeAssert](src/main/java/com/ixxus/alfresco/NodeAssert.java), assertions on nodes can be written like this:
 ```
@@ -24,7 +15,7 @@ For more examples, check out [com.ixxus.alfresco.NodeAssertTest](src/test/java/c
 There's also a custom assertion for testing Alfresco sites. See [com.ixxus.alfresco.SiteAssert](src/main/java/com/ixxus/alfresco/SiteAssert.java) and [how to use it](src/test/java/com/ixxus/alfresco/SiteAssertTest.java)
 
 # Change log
-## [1] - 2017-02-09
+## [1] - 2017-06-05
 ### Added
 - Node assertion
 - Site assertion
