@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Custom assertion specifically for various operations around an Alfresco node
  *
- * @author Bert Bloomer
+ * @author Bert Blommers
  * @author Simon Hutchinson
  * @author Alex Lu
  */

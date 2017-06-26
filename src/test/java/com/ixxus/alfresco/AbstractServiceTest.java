@@ -25,7 +25,7 @@ import javax.transaction.UserTransaction;
 
 /**
  *
- * @author: Bert Bloomer
+ * @author: Bert Blommers
  */
 public abstract class AbstractServiceTest {
 
