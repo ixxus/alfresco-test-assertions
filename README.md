@@ -16,7 +16,9 @@ assertThat(nodeRef).exists().propertyValue(ContentModel.PROP_TITLE, startsWithTi
 
 For more examples, check out [com.ixxus.alfresco.NodeAssertTest](src/test/java/com/ixxus/alfresco/NodeAssertTest.java).
 
-There's also a custom assertion for testing Alfresco sites. See [com.ixxus.alfresco.SiteAssert](src/main/java/com/ixxus/alfresco/SiteAssert.java) and [how to use it](src/test/java/com/ixxus/alfresco/SiteAssertTest.java)
+There's also a custom assertion for testing:
+ - Alfresco Sites. See [com.ixxus.alfresco.SiteAssert](src/main/java/com/ixxus/alfresco/SiteAssert.java) and [how to use it](src/test/java/com/ixxus/alfresco/SiteAssertTest.java)
+ - Alfresco Workflows. See [com.ixxus.alfresco.WorkflowAssert](src/main/java/com/ixxus/alfresco/WorkflowAssert.java) and [how to use it](src/test/java/com/ixxus/alfresco/WorkflowAssertTest.java)
 
 # How to include the library
 We are still working on deploying to maven central. At the mean time, we suggest to clone the repository and build locally.
@@ -39,6 +41,7 @@ Then include as a maven dependency
 ## Unreleased
 ### Added
  - AssertJ Conditions for NodeAssert
+ - WorkflowAssert in the same style as NodeAssert/SiteAssert
 
 ## [1] - 2017-06-05
 ### Added
