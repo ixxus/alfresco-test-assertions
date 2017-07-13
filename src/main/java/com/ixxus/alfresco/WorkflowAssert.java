@@ -121,6 +121,16 @@ public class WorkflowAssert extends AbstractAssert<WorkflowAssert, WorkflowInsta
     }
 
     /**
+     * Verify properties of an attachment using {@link NodeAssert}
+     * 
+     * @param attachment
+     * @return
+     */
+    public NodeAssert where(NodeRef attachment) {
+        return NodeAssert.assertThat(attachment);
+    }
+
+    /**
      * Returns a list of {@link NodeRef} using the given
      * <code>packageNodeRef</code> as container
      *

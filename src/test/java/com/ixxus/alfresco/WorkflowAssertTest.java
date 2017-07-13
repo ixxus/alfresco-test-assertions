@@ -115,6 +115,16 @@ public class WorkflowAssertTest extends AbstractServiceTest {
         WorkflowAssert.assertThat(workflowInstance).hasDescription("Unknown Description");
     }
 
+    @Test
+    public void test_attachment_properties_can_be_tested() {
+        String attachment1Name = (String) nodeService.getProperty(attachment1, ContentModel.PROP_NAME);
+
+        WorkflowAssert.assertThat(workflowInstance)
+                        .hasPackageItemAttached(attachment1)
+                        .where(attachment1)
+                        .hasPropertyValue(ContentModel.PROP_NAME, attachment1Name);
+    }
+
     private WorkflowInstance createWorkflow() {
         String workflowDefinitionId = getWorkflowDefIdByName(WORKFLOW_DEF_NAME);
         NodeRef assignee = personService.getPerson(AuthenticationUtil.getAdminUserName());
