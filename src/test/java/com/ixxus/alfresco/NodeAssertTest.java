@@ -15,30 +15,38 @@
  */
 package com.ixxus.alfresco;
 
-import com.tradeshift.test.remote.Remote;
-import com.tradeshift.test.remote.RemoteTestRunner;
-import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.namespace.QName;
-import org.alfresco.util.PropertyMap;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import static com.ixxus.alfresco.NodeAssert.assertThat;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ixxus.alfresco.NodeAssert.assertThat;
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.ContentWriter;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyMap;
+import org.assertj.core.api.Condition;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.tradeshift.test.remote.Remote;
+import com.tradeshift.test.remote.RemoteTestRunner;
 
 @RunWith(RemoteTestRunner.class)
 @Remote(runnerClass = SpringJUnit4ClassRunner.class)
@@ -61,13 +69,17 @@ public class NodeAssertTest extends AbstractServiceTest {
     @Autowired
     private ContentService contentService;
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Before
     public void setUp() {
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
         String nodeName = "NodeAssertTest-" + UUID.randomUUID();
         PropertyMap propertyMap = new PropertyMap();
         propertyMap.put(ContentModel.PROP_NAME, nodeName);
-        nodeRef = nodeService.createNode(repository.getCompanyHome(), ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, nodeName), ContentModel.TYPE_CONTENT, propertyMap).getChildRef();
+        nodeRef = nodeService.createNode(repository.getCompanyHome(), ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, nodeName),
+                        ContentModel.TYPE_CONTENT, propertyMap).getChildRef();
     }
 
     @After
@@ -137,6 +149,25 @@ public class NodeAssertTest extends AbstractServiceTest {
     public void test_failed_property_value_test() {
         nodeService.setProperty(nodeRef, ContentModel.PROP_COMPANYEMAIL, "my@email.com");
         assertThat(nodeRef).doesNotHavePropertyValue(ContentModel.PROP_COMPANYEMAIL, "my@email.com");
+    }
+
+    @Test
+    public void test_property_starts_with() {
+        nodeService.setProperty(nodeRef, ContentModel.PROP_COMPANYEMAIL, "myname@email.com");
+        Condition<Serializable> startsWithMe = new Condition<>(value -> ((String) value).startsWith("myname"), "Should start with 'myname'");
+        assertThat(nodeRef).propertyValue(ContentModel.PROP_COMPANYEMAIL, startsWithMe);
+    }
+
+    @Test
+    public void test_property_not_starts_with() {
+        String errorMsg = "Should start with 'myname'";
+        exception.expect(AssertionError.class);
+        exception.expectMessage(errorMsg);
+        //
+        nodeService.setProperty(nodeRef, ContentModel.PROP_COMPANYEMAIL, "someoneelse@email.com");
+        Condition<Serializable> startsWithMe = new Condition<>(value -> ((String) value).startsWith("myname"), errorMsg);
+        //
+        assertThat(nodeRef).propertyValue(ContentModel.PROP_COMPANYEMAIL, startsWithMe);
     }
 
     @Test
