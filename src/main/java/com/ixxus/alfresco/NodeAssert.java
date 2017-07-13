@@ -15,6 +15,9 @@
  */
 package com.ixxus.alfresco;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ContentData;
@@ -25,9 +28,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
-
-import java.io.Serializable;
-import java.util.List;
+import org.assertj.core.api.Condition;
 
 /**
  * Custom assertion specifically for various operations around an Alfresco node
@@ -61,6 +62,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
 
     /**
      * Setter for Alfresco ContentService
+     * 
      * @param contentService an instance of ContentService
      */
     public static void setContentService(final ContentService contentService) {
@@ -185,6 +187,13 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
         return this;
     }
 
+    public NodeAssert propertyValue(QName property, Condition<Serializable> expectedCondition) {
+        exists();
+        final Serializable actualValue = nodeService.getProperty(this.actual, property);
+        Assertions.assertThat(expectedCondition.matches(actualValue)).as(expectedCondition.description()).isTrue();
+        return this;
+    }
+
     /**
      * Check if a node has a multiple value property with the provided value as
      * a member.
@@ -198,7 +207,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
         final List<T> values = (List<T>) nodeService.getProperty(this.actual, property);
         if (!values.contains(expectedValue)) {
             failWithMessage("Node <%s> should have value <%s> as a member of <%s>", this.actual, expectedValue,
-                    property);
+                            property);
         }
 
         return this;
@@ -217,7 +226,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
         final List<T> values = (List<T>) nodeService.getProperty(this.actual, property);
         if ((values != null) && values.contains(expectedValue)) {
             failWithMessage("Node <%s> should not have value <%s> as a member of <%s>", this.actual, expectedValue,
-                    property);
+                            property);
         }
 
         return this;
@@ -228,7 +237,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
      * matches.
      *
      * @param qnamePattern the association qname pattern to match against
-     * @param target       The {@link NodeRef} of the target
+     * @param target The {@link NodeRef} of the target
      * @return The created node assertion object
      */
     public NodeAssert doesNotHaveTargetAssociationTo(final QName qnamePattern, final NodeRef target) {
@@ -242,7 +251,8 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
     }
 
     /**
-     * Check if a node has any target association with the given qname. Fail if &gt; 0.
+     * Check if a node has any target association with the given qname. Fail if
+     * &gt; 0.
      *
      * @param qnamePattern the association qname pattern to match against
      * @return The created node assertion object
@@ -340,7 +350,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
         final ContentReader reader = contentService.getReader(actual, contentQName);
         if (reader != null) {
             Assertions.assertThat(reader.getContentString()).as("Content should contain our expected string")
-                    .contains(expected);
+                            .contains(expected);
         } else {
             failWithMessage("Node <%s> should have our content ", actual);
         }
