@@ -9,6 +9,10 @@ Using the [com.ixxus.alfresco.NodeAssert](src/main/java/com/ixxus/alfresco/NodeA
 ```bash
 assertThat(nodeRef).exists().hasAspect(ContentModel.ASPECT_EMAILED).hasPropertyValue(ContentModel.PROP_NAME, "This is a node's name");
 ```
+```bash
+Condition<Serializable> startsWithTitle = new Condition<>(value -> ((String) value).startsWith("title"), "Should start with 'title'");
+assertThat(nodeRef).exists().propertyValue(ContentModel.PROP_TITLE, startsWithTitle);
+```
 
 For more examples, check out [com.ixxus.alfresco.NodeAssertTest](src/test/java/com/ixxus/alfresco/NodeAssertTest.java).
 
@@ -32,6 +36,10 @@ Then include as a maven dependency
 ```
 
 # Change log
+## Unreleased
+### Added
+ - AssertJ Conditions for NodeAssert
+
 ## [1] - 2017-06-05
 ### Added
 - Node assertion
