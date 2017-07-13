@@ -33,4 +33,13 @@
         </property>
     </bean>
 
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="com.ixxus.alfresco.WorkflowAssert.setNodeService"/>
+        <property name="arguments">
+            <list>
+                <ref bean="NodeService"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>
