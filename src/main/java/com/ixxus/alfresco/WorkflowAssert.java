@@ -1,6 +1,7 @@
 package com.ixxus.alfresco;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.alfresco.model.ContentModel;
@@ -70,10 +71,12 @@ public class WorkflowAssert extends AbstractAssert<WorkflowAssert, WorkflowInsta
      * @param expectedItems the expectedItems attached to the workflow
      * @return
      */
-    public WorkflowAssert hasPackageItemsAttached(final NodeRef... expectedItems) {
+    public WorkflowAssert hasPackageItemsAttached(final Set<NodeRef> expectedItems) {
+        if (expectedItems == null) {
+            return this;
+        }
         final List<NodeRef> wfItems = getPackageItems(this.actual.getWorkflowPackage());
-        Assertions.assertThat(wfItems).as("The number of attached items on the workflow has to match")
-                        .hasSize(expectedItems.length);
+        Assertions.assertThat(wfItems).as("The number of attached items on the workflow has to match").hasSize(expectedItems.size());
         for (final NodeRef item : expectedItems) {
             Assertions.assertThat(wfItems)
                             .as(String.format("The item '%s' should be an attachment on the workflow", item.toString()))
@@ -90,8 +93,7 @@ public class WorkflowAssert extends AbstractAssert<WorkflowAssert, WorkflowInsta
      */
     public WorkflowAssert hasNumberOfPackageItems(final int nrOfItems) {
         final List<NodeRef> wfItems = getPackageItems(this.actual.getWorkflowPackage());
-        Assertions.assertThat(wfItems).as("The number of attached items on the workflow has to match")
-                        .hasSize(nrOfItems);
+        Assertions.assertThat(wfItems).as("The number of attached items on the workflow has to match").hasSize(nrOfItems);
         return this;
     }
 
@@ -101,9 +103,8 @@ public class WorkflowAssert extends AbstractAssert<WorkflowAssert, WorkflowInsta
      * @param userName the userName parameter to be matched
      * @return
      */
-    public WorkflowAssert hasInitiator(final String userName) {
-        final String initiatorName = (String) nodeService.getProperty(this.actual.getInitiator(),
-                        ContentModel.PROP_USERNAME);
+    public WorkflowAssert isInitiator(final String userName) {
+        final String initiatorName = (String) nodeService.getProperty(this.actual.getInitiator(), ContentModel.PROP_USERNAME);
         Assertions.assertThat(initiatorName).as("The initiator should match the user name").isEqualTo(userName);
         return this;
     }
@@ -115,19 +116,18 @@ public class WorkflowAssert extends AbstractAssert<WorkflowAssert, WorkflowInsta
      * @return
      */
     public WorkflowAssert hasDescription(final String description) {
-        Assertions.assertThat(this.actual.getDescription())
-                        .as("The workflow description should match the expected description").isEqualTo(description);
+        Assertions.assertThat(this.actual.getDescription()).as("The workflow description should match the expected description").isEqualTo(description);
         return this;
     }
 
     /**
      * Verify properties of an attachment using {@link NodeAssert}
      * 
-     * @param attachment
+     * @param nodeRef
      * @return
      */
-    public NodeAssert where(NodeRef attachment) {
-        return NodeAssert.assertThat(attachment);
+    public NodeAssert attachment(NodeRef nodeRef) {
+        return NodeAssert.assertThat(nodeRef);
     }
 
     /**

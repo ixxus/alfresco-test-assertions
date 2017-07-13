@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.google.common.collect.ImmutableSet;
 import com.tradeshift.test.remote.Remote;
 import com.tradeshift.test.remote.RemoteTestRunner;
 
@@ -78,11 +79,11 @@ public class WorkflowAssertTest extends AbstractServiceTest {
     @Test
     public void test_workflow_conditions() {
         WorkflowAssert.assertThat(workflowInstance)
-                        .hasInitiator(AuthenticationUtil.getAdminUserName())
+                        .isInitiator(AuthenticationUtil.getAdminUserName())
                         .hasDescription(DESCRIPTION)
                         .hasNumberOfPackageItems(2)
                         .hasPackageItemAttached(attachment1)
-                        .hasPackageItemsAttached(attachment1, attachment2);
+                        .hasPackageItemsAttached(ImmutableSet.of(attachment1, attachment2));
     }
 
     @Test
@@ -105,7 +106,7 @@ public class WorkflowAssertTest extends AbstractServiceTest {
     public void test_failure_when_workflow_has_different_initiator() {
         exception.expect(AssertionError.class);
 
-        WorkflowAssert.assertThat(workflowInstance).hasInitiator("unknown User");
+        WorkflowAssert.assertThat(workflowInstance).isInitiator("unknown User");
     }
 
     @Test
@@ -121,7 +122,7 @@ public class WorkflowAssertTest extends AbstractServiceTest {
 
         WorkflowAssert.assertThat(workflowInstance)
                         .hasPackageItemAttached(attachment1)
-                        .where(attachment1)
+                        .attachment(attachment1)
                         .hasPropertyValue(ContentModel.PROP_NAME, attachment1Name);
     }
 
