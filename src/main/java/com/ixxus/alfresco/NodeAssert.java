@@ -168,7 +168,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
     public NodeAssert hasPropertyValue(final QName property, final Serializable expectedValue) {
         exists();
         final Serializable actualValue = nodeService.getProperty(this.actual, property);
-        Assertions.assertThat(expectedValue).isEqualTo(actualValue);
+        Assertions.assertThat(actualValue).isEqualTo(expectedValue);
         return this;
     }
 
@@ -183,7 +183,7 @@ public class NodeAssert extends AbstractAssert<NodeAssert, NodeRef> {
     public NodeAssert doesNotHavePropertyValue(final QName property, final Serializable expectedValue) {
         exists();
         final Serializable actualValue = nodeService.getProperty(this.actual, property);
-        Assertions.assertThat(expectedValue).isNotEqualTo(actualValue);
+        Assertions.assertThat(actualValue).isNotEqualTo(expectedValue);
         return this;
     }
 

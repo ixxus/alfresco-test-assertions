@@ -75,16 +75,16 @@ public class NodeAssertTest extends AbstractServiceTest {
     @Before
     public void setUp() {
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
-        String nodeName = "NodeAssertTest-" + UUID.randomUUID();
-        PropertyMap propertyMap = new PropertyMap();
+        final String nodeName = "NodeAssertTest-" + UUID.randomUUID();
+        final PropertyMap propertyMap = new PropertyMap();
         propertyMap.put(ContentModel.PROP_NAME, nodeName);
         nodeRef = nodeService.createNode(repository.getCompanyHome(), ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, nodeName),
-                        ContentModel.TYPE_CONTENT, propertyMap).getChildRef();
+                ContentModel.TYPE_CONTENT, propertyMap).getChildRef();
     }
 
     @After
     public void tearDown() {
-        if (nodeRef != null && nodeService.exists(nodeRef)) {
+        if ((nodeRef != null) && nodeService.exists(nodeRef)) {
             nodeService.deleteNode(nodeRef);
         }
     }
@@ -140,9 +140,29 @@ public class NodeAssertTest extends AbstractServiceTest {
     }
 
     @Test
+    public void test_has_property_value_fails_with_correct_error_message() {
+        final String errorMsg = "expected:<\"my@[other]mail.com\"> but was:<\"my@[e]mail.com\">";
+        exception.expect(AssertionError.class);
+        exception.expectMessage(errorMsg);
+
+        nodeService.setProperty(nodeRef, ContentModel.PROP_COMPANYEMAIL, "my@email.com");
+        assertThat(nodeRef).hasPropertyValue(ContentModel.PROP_COMPANYEMAIL, "my@othermail.com");
+    }
+
+    @Test
     public void test_does_not_have_property_value() {
         nodeService.setProperty(nodeRef, ContentModel.PROP_COMPANYEMAIL, "my@email.com");
         assertThat(nodeRef).doesNotHavePropertyValue(ContentModel.PROP_COMPANYEMAIL, "my@othermail.com");
+    }
+
+    @Test
+    public void test_does_not_have_property_value_fails_with_correct_error_message() {
+        final String errorMsg = "\nExpecting:\n <\"my@email.com\">\nnot to be equal to:\n <\"my@email.com\">";
+        exception.expect(AssertionError.class);
+        exception.expectMessage(errorMsg);
+
+        nodeService.setProperty(nodeRef, ContentModel.PROP_COMPANYEMAIL, "my@email.com");
+        assertThat(nodeRef).doesNotHavePropertyValue(ContentModel.PROP_COMPANYEMAIL, "my@email.com");
     }
 
     @Test(expected = AssertionError.class)
@@ -154,18 +174,18 @@ public class NodeAssertTest extends AbstractServiceTest {
     @Test
     public void test_property_starts_with() {
         nodeService.setProperty(nodeRef, ContentModel.PROP_COMPANYEMAIL, "myname@email.com");
-        Condition<Serializable> startsWithMe = new Condition<>(value -> ((String) value).startsWith("myname"), "Should start with 'myname'");
+        final Condition<Serializable> startsWithMe = new Condition<>(value -> ((String) value).startsWith("myname"), "Should start with 'myname'");
         assertThat(nodeRef).propertyValue(ContentModel.PROP_COMPANYEMAIL, startsWithMe);
     }
 
     @Test
     public void test_property_not_starts_with() {
-        String errorMsg = "Should start with 'myname'";
+        final String errorMsg = "Should start with 'myname'";
         exception.expect(AssertionError.class);
         exception.expectMessage(errorMsg);
         //
         nodeService.setProperty(nodeRef, ContentModel.PROP_COMPANYEMAIL, "someoneelse@email.com");
-        Condition<Serializable> startsWithMe = new Condition<>(value -> ((String) value).startsWith("myname"), errorMsg);
+        final Condition<Serializable> startsWithMe = new Condition<>(value -> ((String) value).startsWith("myname"), errorMsg);
         //
         assertThat(nodeRef).propertyValue(ContentModel.PROP_COMPANYEMAIL, startsWithMe);
     }
@@ -240,42 +260,42 @@ public class NodeAssertTest extends AbstractServiceTest {
 
     @Test(expected = AssertionError.class)
     public void ensure_node_with_empty_content_throws_exception() {
-        ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+        final ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
         w.putContent("");
         assertThat(nodeRef).hasContent(ContentModel.PROP_CONTENT);
     }
 
     @Test
     public void ensure_node_with_content_does_not_throw_exception() {
-        ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+        final ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
         w.putContent("content");
         assertThat(nodeRef).hasContent(ContentModel.PROP_CONTENT);
     }
 
     @Test
     public void ensure_node_has_content() {
-        ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+        final ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
         w.putContent("content");
         assertThat(nodeRef).hasContent("content");
     }
 
     @Test(expected = AssertionError.class)
     public void ensure_node_with_different_content_throws_exception() {
-        ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+        final ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
         w.putContent("content");
         assertThat(nodeRef).hasContent("different content");
     }
 
     @Test
     public void ensure_node_content_contains_our_string() {
-        ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+        final ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
         w.putContent("my custom content");
         assertThat(nodeRef).containsContent("custom");
     }
 
     @Test(expected = AssertionError.class)
     public void ensure_node_content_that_does_not_contain_our_string_throws_exception() {
-        ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+        final ContentWriter w = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
         w.putContent("content");
         assertThat(nodeRef).containsContent("different content");
     }
