@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
     <groupId>com.ixxus.alfresco</groupId>
 	<artifactId>alfresco-test-assertions</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>5</version>
 
     <name>Alfresco Test Assertions</name>
     <description>Fluent assertions for writing integration (remote unit) tests for Alfresco</description>
